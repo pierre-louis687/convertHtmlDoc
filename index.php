@@ -1,5 +1,5 @@
 <?php
-$version = '1.0.1';
+$version = '1.0.2';
 $PARAM_hote='localhost'; // le chemin vers le serveur
 $PARAM_port='3306';
 $PARAM_nom_bd='convertdoc'; // le nom de votre base de données
