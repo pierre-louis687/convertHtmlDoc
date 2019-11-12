@@ -4,13 +4,14 @@ class MyConvert
     private $filenameHtml;
     private $filenameCss;
     private $filenameHtmlNew;
+    private $fullPathCss;
     private $tab1;          //String: contains original CSS code
     private $styles;        //Array: List of CSS styles from header style tags
     private $tab;           //Array: List of CSS styles from body styles tags
 
-    public function __construct($filename)
+    public function __construct($folderDest, $filename)
     {
-        $this->setFilename($filename);
+        $this->setFilename($folderDest, $filename);
 
         $this->iniTab1();      //extract Css Code from original file
         $this->iniStyles();    //Extract CSS code in an Array;
@@ -85,13 +86,14 @@ class MyConvert
         $count = preg_match_all('/ style=([\S\s]+?)\>/', $this->tab[1], $this->styles); 
     }
 
-    private function setFilename($filename) {
-        $this->filenameHtml = $filename;
+    private function setFilename($folderDest, $filename) {
+        $this->filenameHtml = $folderDest.$filename;
 
         $t = explode('.',$filename);
 
         $this->filenameCss      = $t[0].'.css';
-        $this->filenameHtmlNew  = $t[0].'_new.html';
+        $this->fullPathCss      = $folderDest.$t[0].'.css';
+        $this->filenameHtmlNew  = $folderDest.$t[0].'_new.html';
     }
 
     public function getStyles() {
@@ -99,7 +101,7 @@ class MyConvert
     }
 
     public function getFilenameHtml() {
-        return $this->filenameHtml ;
+        return $this->filenameHtml;
     }
 
     public function getFilenameHtmlNew() {
@@ -107,7 +109,11 @@ class MyConvert
     }
 
     public function getFilenameCss() {
-        return $this->filenameCss ;
+        return $this->filenameCss;
+    }
+
+    public function getFullPathCss() {
+        return $this->fullPathCss;
     }
 
     

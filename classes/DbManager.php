@@ -39,6 +39,12 @@ class DbManager
     return $requete->fetchAll(PDO::FETCH_ASSOC);
   }
 
+  public function getClassCss2($val) {
+    $requete = $this->_db->prepare("SELECT id, nom FROM classecss WHERE nom = :nom");
+    $requete->execute(array('nom'=>$val));
+    return $requete->fetchAll(PDO::FETCH_ASSOC);
+  }
+
   public function setProprieteCss($paire, $idClasse) {
     $requete = $this->_db->prepare("INSERT INTO proprietecss (nom,valeur,classecss) VALUES (:nom,:valeur,:classe)");
     $requete->execute(array(':nom' => $paire[0], 'valeur'=>$paire[1], ':classe'=>$idClasse));

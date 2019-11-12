@@ -1,4 +1,5 @@
 <?php
+$version = '1.0.1';
 $PARAM_hote='localhost'; // le chemin vers le serveur
 $PARAM_port='3306';
 $PARAM_nom_bd='convertdoc'; // le nom de votre base de données
@@ -24,7 +25,7 @@ if (isset($_POST['submit'])) {
 
     spl_autoload_register('loadClass');
 
-    $myConvert = new MyConvert($folderDest.$_FILES["fichier"]["name"]);
+    $myConvert = new MyConvert($folderDest,$_FILES["fichier"]["name"]);
 
     $dbManager = new dbManager($PARAM_hote, $PARAM_port, $PARAM_nom_bd, $PARAM_utilisateur, $PARAM_mot_passe);
 
@@ -33,6 +34,8 @@ if (isset($_POST['submit'])) {
     extractClasses($dbManager, $myConvert, $minified);
 
     replaceStyle($dbManager, $myConvert, $minified);
+
+    extractTags($dbManager, $myConvert, $minified);
 
     saveHTML($myConvert, $withHeaders);
 

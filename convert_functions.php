@@ -117,7 +117,7 @@ function extractClasses($dbManager, $myConvert, $minified) {
 
     $styles = $myConvert->getStyles();
 
-    $handle=fopen($myConvert->getFilenameCss(),'w+');
+    $handle=fopen($myConvert->getFullPathCss(),'w+');
 
     for ($i=0;$i<count($styles[1]);$i++) {
         $styles[1][$i] = explode(' ', $styles[1][$i]); //séparer class et styles dans p
@@ -169,27 +169,27 @@ function replaceStyle($dbManager, $myConvert, $minified) {
     $myConvert->setNewStyle();
     $styles = $myConvert->getStyles();
 
-    $handle=fopen($myConvert->getFilenameCss(),'a+');
+    $handle=fopen($myConvert->getFullPathCss(),'a+');
+    
+    $tab = $myConvert->getTab();
 
     $c=1;
     for ($i=0;$i<count($styles[1]);$i++) {
         if (!isset($styles[1][$i])) continue;
 
-        $result = $dbManager->getSpan($styles[1][$i]);
+        $result = $dbManager->getSpan($styles[1][$i]); //verify if style exists in DB
 
         if (count($result)==0) {
             $className='CL00'.$c++;
 
-            $dbManager->setSpan($styles[1][$i], $className);
+            $dbManager->setSpan($styles[1][$i], $className); //save style in DB if not exists
 
             //replace style=property with style=class and clean bad caracters
             if (!preg_match('/\<\/span/', $styles[1][$i])) {
                 $styles[1][$i] = preg_replace('/\./','\.', $styles[1][$i]);
                 $styles[1][$i] = preg_replace('/\=/',':', $styles[1][$i]);
-                
-                $tab = $myConvert->getTab();
-                $tab[1]=preg_replace('/'.$styles[1][$i].'/', 'class="'.$className.'"', $tab[1]);
-                $myConvert->setTab($tab);                
+                                
+                $tab[1]=preg_replace('/style='.$styles[1][$i].'/', 'class="'.$className.'"', $tab[1]);                               
             }           
             $styles[1][$i] = preg_replace('/\\\./','.', $styles[1][$i]);
             $styles[1][$i] = preg_replace('/\r\n|style=/','', $styles[1][$i]);
@@ -201,6 +201,53 @@ function replaceStyle($dbManager, $myConvert, $minified) {
             fwrite($handle,'.'.$className.' {'.$RC);
             if ($minified) fwrite($handle, $styles[1][$i].";".$RC); else fwrite($handle, '    '.$styles[1][$i].";".$RC);
             fwrite($handle,'}'.$RC);
+        }
+    }
+    $myConvert->setTab($tab); 
+    fclose($handle);
+}
+
+/**********************Extract classes and properties only for known tags**************/
+function extractTags($dbManager, $myConvert, $minified) {
+
+    $tags = ['\<h1', '\<h2', '\<h3', '\<h4', '<em', '<pre', '<ol', '<ul'];
+
+    if ($minified) $RC=""; else $RC="\n";
+
+    $handle=fopen($myConvert->getFullPathCss(),'a+');
+
+    $tab = $myConvert->getTab();
+    foreach ($tags as $tag) { //find array tags in body code
+        if (preg_match_all('/'.$tag.'/i', $tab[1], $founds)) { 
+            
+            foreach ($founds as $found1) {
+                foreach ($found1 as $found) {
+                    $found = preg_replace('/\</','', $found);
+
+                    //Vérifier ds BDD si classes Utilisées pour ne pas les réécrire 50 fois
+                    $resultUsed = $dbManager->getUsed($found);
+
+                    if ($resultUsed['used']=='1') continue;
+                    //MAJ Classes ds BDD Utilisées pour ne pas les réécrire 50 fois
+                    $dbManager->setUsed($found);
+
+                    $results = $dbManager->getClassCss2($found); //get id class from DB 
+
+                    if (!empty($results)) { //found class
+
+                        foreach ($results as $result)
+                            $resultProps = $dbManager->getProprieteCss($result['id']); //look for properties in DB
+
+                            //Write CSS code into file
+                            fwrite($handle,$found.' {'.$RC); //write class
+                            foreach($resultProps as $resultProp) {      //write properties                      
+                                if ($minified) fwrite($handle, $resultProp['nom'].':'.$resultProp['valeur'].";"); 
+                                else fwrite($handle,$resultProp['nom'].':'.$resultProp['valeur'].";");                             
+                            }
+                            fwrite($handle,'}'.$RC);
+                    }
+                }
+            }
         }
     }
     fclose($handle);
@@ -232,6 +279,4 @@ function saveHTML($myConvert, $withHeaders) {
     if ($withHeaders) fwrite($handle,"</body>\n</html>");
 
     fclose($handle);
-
-    echo $tab[1];
 }
