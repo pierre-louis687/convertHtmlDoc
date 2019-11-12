@@ -50,8 +50,11 @@ class MyConvert
         $document = preg_replace("(\r\n|\n|\r)",' ',file_get_contents("C:/Users/1900780/Documents/Afpa/Ressources/PHP/ConvertDoc/".$this->filenameHtml));
 
         //ne garder que les styles
-        $this->tab1 = preg_split ('/\<style\>|\<\/style\>/', $document);
+        //$this->tab1 = preg_split ('/\<style\>|\<\/style\>/', $document); //if word document saved with html format filtered web page
+        preg_match_all('/\<style\>([\S\s]+?)\<\/style/', $document, $this->tab1);
 
+        $this->tab1[1] = $this->tab1[1][1];                                 //if word document saved with html format web page
+        
         if (!isset($this->tab1[1])) die("no css style in your html file !");
 
         //supprimer commentaire --> et <!--
@@ -62,8 +65,6 @@ class MyConvert
 
         //Créer un tableau contenant les blocs de style (classe+propriétés)
         $this->tab1 = preg_split('/\}/', $this->tab1[1]);
-
-        //return $this->tab1;
     }
 
     public function iniTab() {
