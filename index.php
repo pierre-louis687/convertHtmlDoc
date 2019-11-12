@@ -8,8 +8,8 @@ $PARAM_mot_passe='formation2019'; // mot de passe de l'utilisateur pour se conne
 $folderDest="files_origin/"; //destination folder for upload 
 
 if (isset($_POST['submit'])) {
+  
   require_once('convert_functions.php');
-  print_r($_POST);
 
   if (isset($_POST['minified']))    $minified=true;    else $minified=false;
   if (isset($_POST['withHeaders'])) $withHeaders=true; else $withHeaders=false;
@@ -35,6 +35,8 @@ if (isset($_POST['submit'])) {
     replaceStyle($dbManager, $myConvert, $minified);
 
     saveHTML($myConvert, $withHeaders);
+
+    header('location:'.$myConvert->getFilenameHtmlNew());
   }
 }
 
