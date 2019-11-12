@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang=fr>
+<head>
+  <meta http-equiv=Content-Type content="text/html; charset=utf-8">
+  <META NAME="description" CONTENT="files_origin/Installer easyadmin Symfony 4.html" />
+  <META NAME="robots" CONTENT="ALL" />
+  <META NAME="author" CONTENT="pierre-louis Peyssard" />
+  <META NAME="viewport" CONTENT="width=device-width" />
+  <link rel="stylesheet" href="files_origin/Installer easyadmin Symfony 4.css" type="text/css" media="all" >
+</head>
+
+
+<body lang=FR link=blue vlink="#954F72">
+
+<div class=WordSection1>
+
+<p class=MsoTitle><span style=class="CL001">Installer easyadmin Symfony 4</span></p>
+
+<div style=class="CL002">
+
+<h1>Installation</h1>
+
+</div>
+
+<p class=MsoNormal><span style=class="CL003">Tout
+développeur d’une application Symfony a besoin de pouvoir gérer les données
+dans les tables de la base de donnée. Heureusement, Easyadmin est un composant
+qui permet d’intervenir sur un backoffice afin de créer, modifier ou supprimer
+à volonté les enregistrements des tables.</span></p>
+
+<p class=MsoNormal><span style=class="CL003">Easy admin
+s’installe avec composer comme tout composant&nbsp;:</span></p>
+
+<p class=MsoNormal><span style=class="CL004">php ..\composer.phar require admin</span></p>
+
+<p class=MsoNormal><img width=698 height=325 id="Image 1"
+src="Installer%20easyadmin%20Symfony%204_fichiers/image001.jpg"></p>
+
+<p class=MsoNormal><span style=class="CL003">Le bundle
+est installé dans </span><span style=class="CL005">vendor\easycorp\easyadmin-bundle</span></p>
+
+<p class=MsoNormal><span style=class="CL003">Cette
+commande génère automatiquement le fichier de route config\routes\easy_admin.yaml</span></p>
+
+<p class=MsoNormal style=class="CL006"><span style=class="CL007">easy_admin_bundle</span><span style=class="CL008">:</span></p>
+
+<p class=MsoNormal style=class="CL006"><span style=class="CL008">&nbsp;&nbsp;&nbsp;&nbsp;</span><span style=class="CL007">resource</span><span style=class="CL008">:&nbsp;</span><span style=class="CL009">'@EasyAdminBundle/Controller/EasyAdminController.php'</span></p>
+
+<p class=MsoNormal style=class="CL006"><span style=class="CL008">&nbsp;&nbsp;&nbsp;&nbsp;</span><span style=class="CL007">prefix</span><span style=class="CL0010">:&nbsp;</span><span style=class="CL0011">/admin</span></p>
+
+<p class=MsoNormal style=class="CL006"><span style=class="CL008">&nbsp;&nbsp;&nbsp;&nbsp;</span><span style=class="CL007">type</span><span style=class="CL0010">:&nbsp;</span><span style=class="CL0011">annotation</span></p>
+
+<p class=MsoNormal><span style=class="CL003">&nbsp;</span></p>
+
+<p class=MsoNormal><span style=class="CL003">Crée un
+backoffice avec easy-admin est très rapide si vous avez déjà défini des
+entités. Sinon, il faut d’abord que les entités soit générées (avec la commande
+make:entity) et elles doivent toutes posséder une clef primaire&nbsp;:</span></p>
+
+<p class=MsoNormal style=class="CL006"><span style=class="CL0012">/**</span></p>
+
+<p class=MsoNormal style=class="CL006"><span style=class="CL0012">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;</span><span style=class="CL007">@var</span><span style=class="CL0013">&nbsp;</span><span style=class="CL0014">int</span></p>
+
+<p class=MsoNormal style=class="CL006"><span style=class="CL0012">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*</span></p>
+
+<p class=MsoNormal style=class="CL006"><span style=class="CL0012">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;@ORM\Column(name=&quot;id&quot;,&nbsp;type=&quot;integer&quot;,&nbsp;nullable=false)</span></p>
+
+<p class=MsoNormal style=class="CL006"><span style=class="CL0012">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;@ORM\GeneratedValue(strategy=&quot;IDENTITY&quot;)</span></p>
+
+<p class=MsoNormal style=class="CL006"><span style=class="CL0012">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/</span></p>
+
+<p class=MsoNormal style=class="CL006"><span style=class="CL008">&nbsp;&nbsp;&nbsp;&nbsp;</span><span style=class="CL007">private</span><span style=class="CL008">&nbsp;$id;</span></p>
+
+<p class=MsoNormal><span style=class="CL003">&nbsp;</span></p>
+
+<p class=MsoNormal><span style=class="CL003">Ouvrir
+ensuite le fichier </span><span style=class="CL0015">config/packages/easy_admin.yaml,
+</span><span style=class="CL0016">décommenter et compléter avec la liste des entités de
+l’application&nbsp;:</span></p>
+
+<p class=MsoNormal style=class="CL006"><span style=class="CL007">easy_admin</span><span style=class="CL008">:</span></p>
+
+<p class=MsoNormal style=class="CL006"><span style=class="CL008">&nbsp;&nbsp;&nbsp;</span><span style=class="CL007">entities</span><span style=class="CL008">:</span></p>
+
+<p class=MsoNormal style=class="CL006"><span style=class="CL008">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style=class="CL0012">#&nbsp;List&nbsp;the&nbsp;entity&nbsp;class&nbsp;name&nbsp;you&nbsp;want&nbsp;to&nbsp;manage</span></p>
+
+<p class=MsoNormal style=class="CL006"><span style=class="CL008">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;</span><span style=class="CL009">App\Entity\Achat</span></p>
+
+<p class=MsoNormal style=class="CL006"><span style=class="CL008">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;</span><span style=class="CL009">App\Entity\Article</span></p>
+
+<p class=MsoNormal style=class="CL006"><span style=class="CL008">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;</span><span style=class="CL009">App\Entity\Client</span></p>
+
+<p class=MsoNormal style=class="CL006"><span style=class="CL008">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;</span><span style=class="CL009">App\Entity\Commande</span></p>
+
+<p class=MsoNormal style=class="CL006"><span style=class="CL008">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;</span><span style=class="CL009">App\Entity\Fournisseur</span></p>
+
+<p class=MsoNormal style=class="CL006"><span style=class="CL008">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;</span><span style=class="CL009">App\Entity\LigneCommande</span></p>
+
+<p class=MsoNormal style=class="CL006"><span style=class="CL008">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;</span><span style=class="CL009">App\Entity\Listecourses</span></p>
+
+<p class=MsoNormal style=class="CL006"><span style=class="CL008">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;</span><span style=class="CL009">App\Entity\Lot</span></p>
+
+<p class=MsoNormal style=class="CL006"><span style=class="CL008">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;</span><span style=class="CL009">App\Entity\Marque</span></p>
+
+<p class=MsoNormal style=class="CL006"><span style=class="CL008">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;</span><span style=class="CL009">App\Entity\Rayon</span></p>
+
+<p class=MsoNormal><span style=class="CL003">&nbsp;</span></p>
+
+<p class=MsoNormal><span style=class="CL003">Lancer
+ensuite le serveur&nbsp;avec la commande </span><span style=class="CL0017">php bin/console server:run</span></p>
+
+<p class=MsoNormal><span style=class="CL003">Puis aller à
+l’url localhost&nbsp;:8000 (ou votre url perso). Si vous obtenez ce message,
+c’est que vous avez mal suivi l’étape précédente.</span></p>
+
+<p class=MsoNormal><img width=698 height=97 id="Image 2"
+src="Installer%20easyadmin%20Symfony%204_fichiers/image002.jpg"></p>
+
+<p class=MsoNormal><span style=class="CL003">On peut
+aussi obtenir ce message d’erreur&nbsp;:</span></p>
+
+<p class=MsoNormal><img width=698 height=60 id="Image 3"
+src="Installer%20easyadmin%20Symfony%204_fichiers/image003.jpg"></p>
+
+<p class=MsoNormal><span style=class="CL003">Vérifier si
+la base de données est bien mappée avec&nbsp;les lignes de commandes suivantes
+:</span></p>
+
+<p class=MsoListParagraphCxSpFirst style=class="CL0018"><span style=class="CL0019">Ø<span style=class="CL0020">&nbsp; </span></span><span style=class="CL0021">php bin/console
+doctrine:schema:update --dump-sql</span></p>
+
+<p class=MsoListParagraphCxSpLast style=class="CL0018"><span style=class="CL0019">Ø<span style=class="CL0020">&nbsp; </span></span><span style=class="CL0021">php bin/console
+doctrine:schema:update –force</span></p>
+
+<div style=class="CL002">
+
+<h1>L’interface utilisateur</h1>
+
+</div>
+
+<p class=MsoNormal><span style=class="CL003">Si tout va
+bien, nous obtenons l’écran d’accueil suivant&nbsp;qui permet d’éditer les
+tables et les enregistrements:</span></p>
+
+<p class=MsoNormal><img width=698 height=226 id="Image 4"
+src="Installer%20easyadmin%20Symfony%204_fichiers/image004.jpg"></p>
+
+<p class=MsoNormal><img width=85 height=31
+src="Installer%20easyadmin%20Symfony%204_fichiers/image005.png" align=left
+hspace=12><span style=class="CL003">Le bouton  permet de
+créer un article.</span></p>
+
+<p class=MsoNormal><span style=class="CL003">En cliquant
+sur le bouton «&nbsp;<span style=class="CL0022">Edit</span>&nbsp;», un
+formulaire de modification est affiché&nbsp;:</span></p>
+
+<p class=MsoNormal><img width=580 height=391
+src="Installer%20easyadmin%20Symfony%204_fichiers/image006.jpg" align=left
+hspace=12><span style=class="CL003">Le bouton <span style=class="CL0023">delete</span> permet de supprimer un enregistrement</span></p>
+
+<p class=MsoNormal><span style=class="CL003">&nbsp;</span></p>
+
+<p class=MsoNormal><span style=class="CL003">&nbsp;</span></p>
+
+<p class=MsoNormal><span style=class="CL003">&nbsp;</span></p>
+
+<p class=MsoNormal><span style=class="CL003">&nbsp;</span></p>
+
+<p class=MsoNormal><span style=class="CL003">&nbsp;</span></p>
+
+<p class=MsoNormal><span style=class="CL003">&nbsp;</span></p>
+
+<p class=MsoNormal><span style=class="CL003">&nbsp;</span></p>
+
+<p class=MsoNormal><span style=class="CL003">&nbsp;</span></p>
+
+<p class=MsoNormal><span style=class="CL003">Traduire
+Easy-admin</span></p>
+
+<p class=MsoNormal><span style=class="CL003">On peut
+obtenir l’interface dans la langue souhaitée&nbsp;en configurant le fichier config/packages/translation.yaml&nbsp;en
+remplaçant «&nbsp;en&nbsp;» par «&nbsp;fr&nbsp;» :</span></p>
+
+<p class=MsoNormal style=class="CL006"><span style=class="CL007">framework</span><span style=class="CL008">:</span></p>
+
+<p class=MsoNormal style=class="CL006"><span style=class="CL008">&nbsp;&nbsp;&nbsp;&nbsp;</span><span style=class="CL007">default_locale</span><span style=class="CL008">:&nbsp;</span><span style=class="CL009">fr</span></p>
+
+<p class=MsoNormal style=class="CL006"><span style=class="CL008">&nbsp;&nbsp;&nbsp;&nbsp;</span><span style=class="CL007">translator</span><span style=class="CL008">:</span></p>
+
+<p class=MsoNormal style=class="CL006"><span style=class="CL008">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style=class="CL007">default_path</span><span style=class="CL008">:&nbsp;</span><span style=class="CL009">'%kernel.project_dir%/translations'</span></p>
+
+<p class=MsoNormal style=class="CL006"><span style=class="CL008">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style=class="CL007">fallbacks</span><span style=class="CL008">:</span></p>
+
+<p class=MsoNormal style=class="CL006"><span style=class="CL008">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;</span><span style=class="CL009">fr</span></p>
+
+<p class=MsoNormal><span style=class="CL003">&nbsp;</span></p>
+
+<p class=MsoNormal><span style=class="CL003">D’autres
+options de configuration sont disponibles sur la documentation de
+Symfony&nbsp;: </span><a
+href="https://symfony.com/doc/master/bundles/EasyAdminBundle/book/basic-configuration.html">https://symfony.com/doc/master/bundles/EasyAdminBundle/book/basic-configuration.html</a></p>
+
+<p class=MsoNormal><span style=class="CL003">On peut
+aussi modifier le design&nbsp;:</span></p>
+
+<p class=MsoNormal><a
+href="https://symfony.com/doc/master/bundles/EasyAdminBundle/book/design-configuration.html#changing-the-main-backend-color">https://symfony.com/doc/master/bundles/EasyAdminBundle/book/design-configuration.html#changing-the-main-backend-color</a></p>
+
+</div>
+
+</body>
+
+</body>
+</html>
